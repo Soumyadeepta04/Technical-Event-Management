@@ -1,4 +1,4 @@
-# Event Management System 🎉
+# Technical Event Management System 
 
 > A modern event management platform connecting event organizers, service vendors, and customers in one seamless ecosystem.
 
