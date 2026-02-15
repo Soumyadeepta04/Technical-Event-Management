@@ -14,7 +14,7 @@ const Navbar = () => {
     logout();
     const loginPath = role === 'vendor' ? '/vendor/login'
       : role === 'user' ? '/user/login'
-      : '/admin/login';
+        : '/admin/login';
     navigate(loginPath);
   };
 
@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to={getDashboardPath()}>🎉 Event Manager</Link>
+        <Link to={getDashboardPath()}> Event Manager</Link>
       </div>
 
       <div className="navbar-links">
@@ -40,6 +40,7 @@ const Navbar = () => {
           <>
             <Link to="/admin/vendors" className="nav-link">Vendors</Link>
             <Link to="/admin/users" className="nav-link">Users</Link>
+            <Link to="/admin/transactions" className="nav-link">Transactions</Link>
           </>
         )}
 

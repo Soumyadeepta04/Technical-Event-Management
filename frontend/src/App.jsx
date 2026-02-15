@@ -20,6 +20,7 @@ import AddVendor from './pages/admin/AddVendor.jsx';
 import UpdateVendor from './pages/admin/UpdateVendor.jsx';
 import AddUserAdmin from './pages/admin/AddUserAdmin.jsx';
 import UpdateUserAdmin from './pages/admin/UpdateUserAdmin.jsx';
+import TransactionHistory from './pages/admin/TransactionHistory.jsx';
 
 /* ─── Vendor Pages ─── */
 import VendorDashboard from './pages/vendor/VendorDashboard.jsx';
@@ -62,6 +63,7 @@ const App = () => {
           <Route path="/admin/vendors/update/:id" element={<ProtectedRoute role="admin"><UpdateVendor /></ProtectedRoute>} />
           <Route path="/admin/users/add" element={<ProtectedRoute role="admin"><AddUserAdmin /></ProtectedRoute>} />
           <Route path="/admin/users/update/:id" element={<ProtectedRoute role="admin"><UpdateUserAdmin /></ProtectedRoute>} />
+          <Route path="/admin/transactions" element={<ProtectedRoute role="admin"><TransactionHistory /></ProtectedRoute>} />
 
           {/* ── Vendor ── */}
           <Route path="/vendor/dashboard" element={<ProtectedRoute role="vendor"><VendorDashboard /></ProtectedRoute>} />
