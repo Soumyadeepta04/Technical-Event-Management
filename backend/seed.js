@@ -2,9 +2,11 @@
  * Run once to create the default admin account.
  * Usage: node seed.js
  */
-require("dotenv").config();
-const mongoose = require("mongoose");
-const User = require("./models/User");
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import User from "./models/User.js";
+
+dotenv.config();
 
 const seedAdmin = async () => {
   try {

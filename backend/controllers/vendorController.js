@@ -1,12 +1,12 @@
-const Product = require("../models/Product");
-const Order = require("../models/Order");
+import Product from "../models/Product.js";
+import Order from "../models/Order.js";
 
 /* ────────────────────────────────────────────────── */
 /*  Products                                         */
 /* ────────────────────────────────────────────────── */
 
 // GET /api/vendor/products
-const getMyProducts = async (req, res, next) => {
+export const getMyProducts = async (req, res, next) => {
   try {
     const products = await Product.find({ vendorId: req.user._id }).sort("-createdAt");
     res.json(products);
@@ -16,7 +16,7 @@ const getMyProducts = async (req, res, next) => {
 };
 
 // POST /api/vendor/products
-const addProduct = async (req, res, next) => {
+export const addProduct = async (req, res, next) => {
   try {
     const { name, price, status } = req.body;
 
@@ -41,7 +41,7 @@ const addProduct = async (req, res, next) => {
 };
 
 // PUT /api/vendor/products/:id
-const updateProduct = async (req, res, next) => {
+export const updateProduct = async (req, res, next) => {
   try {
     const { name, price, status } = req.body;
     const product = await Product.findOne({ _id: req.params.id, vendorId: req.user._id });
@@ -63,7 +63,7 @@ const updateProduct = async (req, res, next) => {
 };
 
 // DELETE /api/vendor/products/:id
-const deleteProduct = async (req, res, next) => {
+export const deleteProduct = async (req, res, next) => {
   try {
     const product = await Product.findOneAndDelete({
       _id: req.params.id,
@@ -83,7 +83,7 @@ const deleteProduct = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 
 // GET /api/vendor/orders
-const getVendorOrders = async (req, res, next) => {
+export const getVendorOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ "items.vendorId": req.user._id })
       .populate("userId", "name email")
@@ -96,7 +96,7 @@ const getVendorOrders = async (req, res, next) => {
 };
 
 // PUT /api/vendor/orders/:id/status
-const updateOrderStatus = async (req, res, next) => {
+export const updateOrderStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
     const validStatuses = ["Ordered", "Received", "Ready for Shipping", "Out For Delivery", "Delivered"];
@@ -132,7 +132,7 @@ const updateOrderStatus = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 
 // GET /api/vendor/dashboard
-const getVendorDashboard = async (req, res, next) => {
+export const getVendorDashboard = async (req, res, next) => {
   try {
     const totalProducts = await Product.countDocuments({ vendorId: req.user._id });
 
@@ -156,7 +156,7 @@ const getVendorDashboard = async (req, res, next) => {
 };
 
 // GET /api/vendor/products/:id
-const getProductById = async (req, res, next) => {
+export const getProductById = async (req, res, next) => {
   try {
     const product = await Product.findOne({ _id: req.params.id, vendorId: req.user._id });
     if (!product) {
@@ -166,15 +166,4 @@ const getProductById = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  getMyProducts,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-  getProductById,
-  getVendorOrders,
-  updateOrderStatus,
-  getVendorDashboard,
 };

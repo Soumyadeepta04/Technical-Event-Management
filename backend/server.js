@@ -1,19 +1,25 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import path from "path";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 
-const connectDB = require("./config/db");
-const errorHandler = require("./middleware/errorHandler");
+dotenv.config();
+
+import connectDB from "./config/db.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 // Route imports
-const authRoutes = require("./routes/auth");
-const adminRoutes = require("./routes/admin");
-const vendorRoutes = require("./routes/vendor");
-const userRoutes = require("./routes/user");
+import authRoutes from "./routes/auth.js";
+import adminRoutes from "./routes/admin.js";
+import vendorRoutes from "./routes/vendor.js";
+import userRoutes from "./routes/user.js";
 
 /* ── Initialise app ── */
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /* ── Global middleware ── */
 app.use(cors());

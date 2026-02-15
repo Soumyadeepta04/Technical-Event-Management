@@ -1,5 +1,9 @@
-const path = require("path");
-const multer = require("multer");
+import path from "path";
+import multer from "multer";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -31,4 +35,4 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
 });
 
-module.exports = upload;
+export default upload;

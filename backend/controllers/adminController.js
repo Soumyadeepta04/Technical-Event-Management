@@ -1,5 +1,5 @@
-const User = require("../models/User");
-const Order = require("../models/Order");
+import User from "../models/User.js";
+import Order from "../models/Order.js";
 
 /**
  * Helper – calculate membership end date from months.
@@ -15,7 +15,7 @@ const calcMembershipEnd = (startDate, months) => {
 /* ────────────────────────────────────────────────── */
 
 // GET /api/admin/vendors
-const getAllVendors = async (_req, res, next) => {
+export const getAllVendors = async (_req, res, next) => {
   try {
     const vendors = await User.find({ role: "vendor" }).sort("-createdAt");
     res.json(vendors);
@@ -25,7 +25,7 @@ const getAllVendors = async (_req, res, next) => {
 };
 
 // POST /api/admin/vendors
-const addVendor = async (req, res, next) => {
+export const addVendor = async (req, res, next) => {
   try {
     const { name, email, password, phone, vendorCategory, membershipMonths } = req.body;
 
@@ -60,7 +60,7 @@ const addVendor = async (req, res, next) => {
 };
 
 // PUT /api/admin/vendors/:id
-const updateVendor = async (req, res, next) => {
+export const updateVendor = async (req, res, next) => {
   try {
     const { name, email, phone, vendorCategory, isActive } = req.body;
     const vendor = await User.findOne({ _id: req.params.id, role: "vendor" });
@@ -83,7 +83,7 @@ const updateVendor = async (req, res, next) => {
 };
 
 // PUT /api/admin/vendors/:id/membership
-const updateMembership = async (req, res, next) => {
+export const updateMembership = async (req, res, next) => {
   try {
     const { months, action } = req.body; // action: "extend" | "cancel"
     const vendor = await User.findOne({ _id: req.params.id, role: "vendor" });
@@ -114,7 +114,7 @@ const updateMembership = async (req, res, next) => {
 };
 
 // DELETE /api/admin/vendors/:id
-const deleteVendor = async (req, res, next) => {
+export const deleteVendor = async (req, res, next) => {
   try {
     const vendor = await User.findOneAndDelete({ _id: req.params.id, role: "vendor" });
     if (!vendor) {
@@ -131,7 +131,7 @@ const deleteVendor = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 
 // GET /api/admin/users
-const getAllUsers = async (_req, res, next) => {
+export const getAllUsers = async (_req, res, next) => {
   try {
     const users = await User.find({ role: "user" }).sort("-createdAt");
     res.json(users);
@@ -141,7 +141,7 @@ const getAllUsers = async (_req, res, next) => {
 };
 
 // POST /api/admin/users
-const addUser = async (req, res, next) => {
+export const addUser = async (req, res, next) => {
   try {
     const { name, email, password, phone } = req.body;
 
@@ -162,7 +162,7 @@ const addUser = async (req, res, next) => {
 };
 
 // PUT /api/admin/users/:id
-const updateUser = async (req, res, next) => {
+export const updateUser = async (req, res, next) => {
   try {
     const { name, email, phone, isActive } = req.body;
     const user = await User.findOne({ _id: req.params.id, role: "user" });
@@ -184,7 +184,7 @@ const updateUser = async (req, res, next) => {
 };
 
 // DELETE /api/admin/users/:id
-const deleteUser = async (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findOneAndDelete({ _id: req.params.id, role: "user" });
     if (!user) {
@@ -200,8 +200,22 @@ const deleteUser = async (req, res, next) => {
 /*  Dashboard Stats                                  */
 /* ────────────────────────────────────────────────── */
 
+// GET /api/admin/transactions
+export const getAllTransactions = async (_req, res, next) => {
+  try {
+    const transactions = await Order.find()
+      .populate("userId", "name email")
+      .populate("items.vendorId", "name email")
+      .sort("-createdAt");
+
+    res.json(transactions);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // GET /api/admin/stats
-const getDashboardStats = async (_req, res, next) => {
+export const getDashboardStats = async (_req, res, next) => {
   try {
     const totalVendors = await User.countDocuments({ role: "vendor" });
     const totalUsers = await User.countDocuments({ role: "user" });
@@ -217,17 +231,4 @@ const getDashboardStats = async (_req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  getAllVendors,
-  addVendor,
-  updateVendor,
-  updateMembership,
-  deleteVendor,
-  getAllUsers,
-  addUser,
-  updateUser,
-  deleteUser,
-  getDashboardStats,
 };

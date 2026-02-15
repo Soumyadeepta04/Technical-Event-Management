@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 /**
  * Helper – calculate membership end date from months.
@@ -21,7 +21,7 @@ const generateToken = (user) =>
 /* ────────────────────────────────────────────────── */
 /*  POST  /api/auth/register                         */
 /* ────────────────────────────────────────────────── */
-const register = async (req, res, next) => {
+export const register = async (req, res, next) => {
   try {
     const { name, email, password, phone, role, vendorCategory, membershipMonths } = req.body;
 
@@ -65,7 +65,7 @@ const register = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 /*  POST  /api/auth/login                            */
 /* ────────────────────────────────────────────────── */
-const login = async (req, res, next) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password, role } = req.body;
 
@@ -102,7 +102,7 @@ const login = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 /*  GET  /api/auth/me                                */
 /* ────────────────────────────────────────────────── */
-const getMe = async (req, res, next) => {
+export const getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ message: "User not found." });
@@ -111,5 +111,3 @@ const getMe = async (req, res, next) => {
     next(error);
   }
 };
-
-module.exports = { register, login, getMe };

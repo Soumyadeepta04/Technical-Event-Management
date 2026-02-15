@@ -1,13 +1,13 @@
-const User = require("../models/User");
-const Product = require("../models/Product");
-const Order = require("../models/Order");
+import User from "../models/User.js";
+import Product from "../models/Product.js";
+import Order from "../models/Order.js";
 
 /* ────────────────────────────────────────────────── */
 /*  Browse Vendors                                   */
 /* ────────────────────────────────────────────────── */
 
 // GET /api/user/vendors?category=Florist
-const getVendors = async (req, res, next) => {
+export const getVendors = async (req, res, next) => {
   try {
     const filter = { role: "vendor", isActive: true };
     if (req.query.category) {
@@ -21,7 +21,7 @@ const getVendors = async (req, res, next) => {
 };
 
 // GET /api/user/vendors/:id/products
-const getVendorProducts = async (req, res, next) => {
+export const getVendorProducts = async (req, res, next) => {
   try {
     const products = await Product.find({
       vendorId: req.params.id,
@@ -39,7 +39,7 @@ const getVendorProducts = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 
 // POST /api/user/orders
-const placeOrder = async (req, res, next) => {
+export const placeOrder = async (req, res, next) => {
   try {
     const {
       items,
@@ -72,7 +72,7 @@ const placeOrder = async (req, res, next) => {
 };
 
 // GET /api/user/orders
-const getMyOrders = async (req, res, next) => {
+export const getMyOrders = async (req, res, next) => {
   try {
     const orders = await Order.find({ userId: req.user._id })
       .populate("items.productId", "name image")
@@ -85,7 +85,7 @@ const getMyOrders = async (req, res, next) => {
 };
 
 // GET /api/user/orders/:id
-const getOrderById = async (req, res, next) => {
+export const getOrderById = async (req, res, next) => {
   try {
     const order = await Order.findOne({
       _id: req.params.id,
@@ -106,7 +106,7 @@ const getOrderById = async (req, res, next) => {
 /* ────────────────────────────────────────────────── */
 
 // GET /api/user/guests
-const getGuestList = async (req, res, next) => {
+export const getGuestList = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id).select("guestList");
     res.json(user.guestList);
@@ -116,7 +116,7 @@ const getGuestList = async (req, res, next) => {
 };
 
 // POST /api/user/guests
-const addGuest = async (req, res, next) => {
+export const addGuest = async (req, res, next) => {
   try {
     const { name, email, phone, relation } = req.body;
     if (!name) {
@@ -134,7 +134,7 @@ const addGuest = async (req, res, next) => {
 };
 
 // PUT /api/user/guests/:guestId
-const updateGuest = async (req, res, next) => {
+export const updateGuest = async (req, res, next) => {
   try {
     const { name, email, phone, relation } = req.body;
     const user = await User.findById(req.user._id);
@@ -157,7 +157,7 @@ const updateGuest = async (req, res, next) => {
 };
 
 // DELETE /api/user/guests/:guestId
-const deleteGuest = async (req, res, next) => {
+export const deleteGuest = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     user.guestList.pull({ _id: req.params.guestId });
@@ -167,16 +167,4 @@ const deleteGuest = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  getVendors,
-  getVendorProducts,
-  placeOrder,
-  getMyOrders,
-  getOrderById,
-  getGuestList,
-  addGuest,
-  updateGuest,
-  deleteGuest,
 };
